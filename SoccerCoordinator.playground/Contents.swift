@@ -1,7 +1,7 @@
 /***************************************************************************************************
  * PART 0: Imports, extensions.
  ***************************************************************************************************/
- 
+
 /*
  * Import 'padding' function for String instances
  */
@@ -16,6 +16,19 @@ extension String {
      */
     func padding(length: Int) -> String {
         return self.padding(toLength: length, withPad: " ", startingAt: 0)
+    }
+}
+
+/*
+ * Extensions for Double functions
+ */
+extension Double {
+    /*
+     * Round the double to decimal places value
+     */
+    func roundTo(places: Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return (self * divisor).rounded() / divisor
     }
 }
 
@@ -116,9 +129,9 @@ func initialize(players: inout [[String : Any]]) {
 initialize(players: &players)
 
 /***************************************************************************************************
- * PART 2: Iterate through all players and assign them to teams such that the number of experienced 
+ * PART 2: Iterate through all players and assign them to teams such that the number of experienced
  *         players on each team are the same.
- *         Ensure that each team's average height is within 1.5 inch of the others as well as having 
+ *         Ensure that each team's average height is within 1.5 inch of the others as well as having
  *         each team contain the same number of experienced players.
  ***************************************************************************************************/
 let teamCount = 3
@@ -177,8 +190,8 @@ func add(player: inout [String : Any], toTeam teamName: String, teamPractice: St
 }
 
 /*
-* Sort players based on the experience and height deviation
-*/
+ * Sort players based on the experience and height deviation
+ */
 func sortPlayers(p1: [String : Any], p2: [String : Any]) -> Bool {
     let e1 = getExperience(of: p1)
     let e2 = getExperience(of: p2)
@@ -232,20 +245,20 @@ for index in 0..<players.count {
     
     let teamIndex = calculateTeamIndex(forPlayer: index, teamCount: teamCount)
     switch teamIndex {
-        case 1:
-            add(player: &player, toTeam: teamNameSharks, teamPractice: teamPracticeSharks, players: &teamSharks)
-        case 2:
-            add(player: &player, toTeam: teamNameDragons, teamPractice: teamPracticeDragons, players: &teamDragons)
-        default:
-            add(player: &player, toTeam: teamNameRaptors, teamPractice: teamPracticeRaptors, players: &teamRaptors)
+    case 1:
+        add(player: &player, toTeam: teamNameSharks, teamPractice: teamPracticeSharks, players: &teamSharks)
+    case 2:
+        add(player: &player, toTeam: teamNameDragons, teamPractice: teamPracticeDragons, players: &teamDragons)
+    default:
+        add(player: &player, toTeam: teamNameRaptors, teamPractice: teamPracticeRaptors, players: &teamRaptors)
     }
 }
 
 /***************************************************************************************************
  * PART 3: Iterate through all three teams of players and generates a personalized letter to the
- *         guardians, letting them know which team the child has been placed on and when they should 
+ *         guardians, letting them know which team the child has been placed on and when they should
  *         attend their first team team practice.
-***************************************************************************************************/
+ ***************************************************************************************************/
 
 /*
  * Constant to store letters to the guardians
@@ -272,7 +285,7 @@ func generateLetter(forPlayer player: [String: Any]) -> String {
         "Your child, \(getName(of: player)), has been accepted to the \(getTeam(of: player)) team. " +
         "The first team practice is on \(getteamPractice(of: player)). "  +
         "Any parents who are interested in coaching assistant should contact the League Coordinator Peter Peters at pp@ms.com. \n\n" +
-        "Peter Peters, the Meverick School Soccer League Coordinator"
+    "Peter Peters, the Meverick School Soccer League Coordinator"
 }
 
 /*
@@ -283,19 +296,21 @@ generate(letters: &letters, forTeam: teamDragons)
 generate(letters: &letters, forTeam: teamRaptors)
 
 /***************************************************************************************************
-* PART 4: Print all teams with players information and generated letters to the guardians.
+ * PART 4: Print all teams with players information and generated letters to the guardians.
  ***************************************************************************************************/
 
 /*
  * Print each team player information
  */
 func print(team players: [[String : Any]], name: String) {
-    print("-------------------- \(name) --------------------")
+    let avgHeight = calculatePlayerAverageHeight(for: players).roundTo(places: 2)
+    
+    print("---------- \(name) (average height: \(avgHeight) inches) ----------")
     printColumns("NAME", "HEIGHT", "EXPERIENCE")
     for player in players {
         print(player: player)
     }
-    print("-------------------------------------------------")
+    print("-----------------------------------------------------------")
 }
 
 /*
@@ -330,7 +345,7 @@ func print(letters: [String]) {
         let letter = letters[index]
         print("#\(index + 1):")
         print(letter)
-        print("-------------------------------------------------")
+        print("-----------------------------------------------------------")
     }
 }
 
@@ -338,7 +353,7 @@ func print(letters: [String]) {
  * Print team players
  */
 
-print("\n===================== TEAMS =====================\n")
+print("\n========================== TEAMS ==========================\n")
 
 print(team: teamSharks, name: teamNameSharks)
 print(team: teamDragons, name: teamNameDragons)
@@ -348,7 +363,6 @@ print(team: teamRaptors, name: teamNameRaptors)
  * Print letters to the guardians
  */
 
-print("\n==================== LETTERS ====================\n")
+print("\n========================= LETTERS =========================\n")
 
 print(letters: letters)
-
