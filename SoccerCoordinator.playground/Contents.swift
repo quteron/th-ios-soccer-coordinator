@@ -177,14 +177,9 @@ func add(player: inout [String : Any], toTeam teamName: String, teamPractice: St
 }
 
 /*
- * Calculate height deviations from the average player height
- */
-let playerHeightDeviations = calculatePlayerHeightDeviations(for: players)
-
-/*
- * Sort players based on the experience and height deviation
- */
-players.sort(by: { (p1, p2) -> Bool in
+* Sort players based on the experience and height deviation
+*/
+func sortPlayers(p1: [String : Any], p2: [String : Any]) -> Bool {
     let e1 = getExperience(of: p1)
     let e2 = getExperience(of: p2)
     
@@ -203,31 +198,46 @@ players.sort(by: { (p1, p2) -> Bool in
     }
     
     return false
-})
+}
 
-var inversedOrder = false
+/*
+ * Calculate team index for the passed player id
+ */
+func calculateTeamIndex(forPlayer index: Int, teamCount: Int) -> Int {
+    let remainder = (index + 1) % teamCount
+    let back = (index / 3) % 2 == 1
+    
+    if back && remainder != 2 {
+        return (remainder + 1) % 2
+    } else {
+        return remainder;
+    }
+}
+
+/*
+ * Calculate height deviations from the average player height
+ */
+let playerHeightDeviations = calculatePlayerHeightDeviations(for: players)
+
+/*
+ * Sort players based on the experience and height deviation
+ */
+players.sort(by: sortPlayers)
+
+/*
+ * Divide players between teams
+ */
 for index in 0..<players.count {
     var player = players[index]
     
-    var remainder = (index + 1) % teamCount
-    let teamIndex: Int
-    if inversedOrder && remainder != 2 {
-        teamIndex = (remainder + 1) % 2
-    } else {
-        teamIndex = remainder;
-    }
-    
+    let teamIndex = calculateTeamIndex(forPlayer: index, teamCount: teamCount)
     switch teamIndex {
-    case 1:
-        add(player: &player, toTeam: teamNameSharks, teamPractice: teamPracticeSharks, players: &teamSharks)
-    case 2:
-        add(player: &player, toTeam: teamNameDragons, teamPractice: teamPracticeDragons, players: &teamDragons)
-    default:
-        add(player: &player, toTeam: teamNameRaptors, teamPractice: teamPracticeRaptors, players: &teamRaptors)
-    }
-    
-    if(remainder == 0) {
-        inversedOrder = !inversedOrder
+        case 1:
+            add(player: &player, toTeam: teamNameSharks, teamPractice: teamPracticeSharks, players: &teamSharks)
+        case 2:
+            add(player: &player, toTeam: teamNameDragons, teamPractice: teamPracticeDragons, players: &teamDragons)
+        default:
+            add(player: &player, toTeam: teamNameRaptors, teamPractice: teamPracticeRaptors, players: &teamRaptors)
     }
 }
 
