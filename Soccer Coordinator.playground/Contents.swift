@@ -154,6 +154,15 @@ func generateLetter(forPlayer player: [String: Any]) -> String {
         "Peter Peters, the Meverick School Soccer League Coordinator"
 }
 
+func print(letters: [String]) {
+    for index in 0..<letters.count {
+        let letter = letters[index]
+        print("#\(index + 1)")
+        print(letter)
+        print("-----------------------------------------------")
+    }
+}
+
 /*
  * Constant to store all available players
  */
@@ -236,26 +245,30 @@ for index in 0..<players.count {
 /*
  * Print team players
  */
+
+print("==================== TEAMS ====================")
+
 print(team: teamSharks, name: SHARKS_TEAM_NAME)
 print(team: teamDragons, name: DRAGONS_TEAM_NAME)
 print(team: teamRaptors, name: RAPTORS_TEAM_NAME)
+
+print("==================== TEAMS ====================")
 
 /*
  * Generate letters to the guardians
  */
 var letters: [String] = []
-//generate(letters: &letters, forTeam: teamSharks)
-//generate(letters: &letters, forTeam: teamDragons)
-//generate(letters: &letters, forTeam: teamRaptors)
+generate(letters: &letters, forTeam: teamSharks)
+generate(letters: &letters, forTeam: teamDragons)
+generate(letters: &letters, forTeam: teamRaptors)
 
 /*
  * Print letters to the guardians
  */
-print("Letter to the guardians:")
-for index in 0..<letters.count {
-    let letter = letters[index]
-    print("#\(index + 1)------")
-    print(letter)
-}
-print("-----------------------------------------------")
+
+print("==================== LETTERS ====================")
+
+print(letters: letters)
+
+print("==================== LETTERS ====================")
 
