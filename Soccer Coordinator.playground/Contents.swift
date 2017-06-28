@@ -1,3 +1,11 @@
+import Foundation
+
+extension String {
+    func padding(length: Int) -> String {
+        return self.padding(toLength: length, withPad: " ", startingAt: 0)
+    }
+}
+
 /*
  * Dicnionary Keys
  */
@@ -53,7 +61,7 @@ func add(player data: (name: String, height: Int, experienced: Bool, guardians: 
     players.append(player)
 }
 
-func add(player: [String : Any], toTeam teamName: String, firstPractice: String, players: inout [[String : Any]]) {
+func add(player: inout [String : Any], toTeam teamName: String, firstPractice: String, players: inout [[String : Any]]) {
     player[TEAM_KEY] = teamName
     player[PRACTICE_TIME_KEY] = firstPractice
     players.append(player)
@@ -108,7 +116,7 @@ func calculatePlayerHeightDeviations(for players: [[String : Any]]) -> [Int : Do
 
 func print(team players: [[String : Any]], name: String) {
     print("--------------------\(name)--------------------")
-    print("NAME\tHEIGHT\tEXPERIENCE")
+    printColumns("NAME", "HEIGHT", "EXPERIENCE")
     for player in players {
         print(player: player)
     }
@@ -116,7 +124,18 @@ func print(team players: [[String : Any]], name: String) {
 }
 
 func print(player: [String : Any]) {
-    print("\(getName(of: player))\t\(getHeight(of: <#T##[String : Any]#>)(of: player))\t\(getExperience(of: <#T##[String : Any]#>)(of: player))")
+    let name = getName(of: player)
+    let height = getHeight(of: player)
+    let experience = getExperience(of: player)
+    printPlayer(name, height, experience)
+}
+
+func printPlayer(_ name: String, _ height: Int, _ experience: Bool) {
+    printColumns(name, "\(height)", "\(experience)")
+}
+
+func printColumns(_ name: String, _ height: String, _ experience: String) {
+    print("\(name.padding(length: 20))\(height.padding(length: 10))\(experience.padding(length: 10))")
 }
 
 func generate(letters: inout [String], forTeam players: [[String: Any]]) {
@@ -190,23 +209,28 @@ var teamRaptors: [[String : Any]] = []
 
 var inversedOrder = false
 for index in 0..<players.count {
-    let player = players[index]
+    var player = players[index]
     
-    var teamIndex = (index + 1) % TEAM_COUNT
-    if inversedOrder {
-        teamIndex = (index + 1) % 2
+    var remainder = (index + 1) % TEAM_COUNT
+    let teamIndex: Int
+    if inversedOrder && remainder != 2 {
+        teamIndex = (remainder + 1) % 2
+    } else {
+        teamIndex = remainder;
     }
     
-    switch team {
+    switch teamIndex {
     case 1:
-        add(player: player, toTeam: SHARKS_TEAM_NAME, firstPractice: SHARKS_FIRST_PRACTICE, players: &teamSharks)
+        add(player: &player, toTeam: SHARKS_TEAM_NAME, firstPractice: SHARKS_FIRST_PRACTICE, players: &teamSharks)
     case 2:
-        add(player: player, toTeam: DRAGONS_TEAM_NAME, firstPractice: DRAGONS_FIRST_PRACTICE, players: &teamDragons)
+        add(player: &player, toTeam: DRAGONS_TEAM_NAME, firstPractice: DRAGONS_FIRST_PRACTICE, players: &teamDragons)
     default:
-        add(player: player, toTeam: RAPTORS_TEAM_NAME, firstPractice: RAPTORS_FIRST_PRACTICE, players: &teamRaptors)
+        add(player: &player, toTeam: RAPTORS_TEAM_NAME, firstPractice: RAPTORS_FIRST_PRACTICE, players: &teamRaptors)
     }
     
-    inversedOrder = !inversedOrder
+    if(remainder == 0) {
+        inversedOrder = !inversedOrder
+    }
 }
 
 /*
@@ -233,5 +257,5 @@ for index in 0..<letters.count {
     print("#\(index + 1)------")
     print(letter)
 }
-print("------")
+print("-----------------------------------------------")
 
