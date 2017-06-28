@@ -181,11 +181,9 @@ func add(player: inout [String : Any], toTeam teamName: String, teamPractice: St
  */
 let playerHeightDeviations = calculatePlayerHeightDeviations(for: players)
 
-
-
 /*
-* Sort players based on the experience and height deviation
-*/
+ * Sort players based on the experience and height deviation
+ */
 players.sort(by: { (p1, p2) -> Bool in
     let e1 = getExperience(of: p1)
     let e2 = getExperience(of: p2)
@@ -315,7 +313,7 @@ func printColumns(_ name: String, _ height: String, _ experience: String) {
 }
 
 /*
- * Print letters
+ * Print passed letters
  */
 func print(letters: [String]) {
     for index in 0..<letters.count {
