@@ -115,12 +115,12 @@ func calculatePlayerHeightDeviations(for players: [[String : Any]]) -> [Int : Do
 }
 
 func print(team players: [[String : Any]], name: String) {
-    print("--------------------\(name)--------------------")
+    print("-------------------- \(name) --------------------")
     printColumns("NAME", "HEIGHT", "EXPERIENCE")
     for player in players {
         print(player: player)
     }
-    print("-----------------------------------------------")
+    print("-------------------------------------------------")
 }
 
 func print(player: [String : Any]) {
@@ -157,9 +157,9 @@ func generateLetter(forPlayer player: [String: Any]) -> String {
 func print(letters: [String]) {
     for index in 0..<letters.count {
         let letter = letters[index]
-        print("#\(index + 1)")
+        print("#\(index + 1):")
         print(letter)
-        print("-----------------------------------------------")
+        print("-------------------------------------------------")
     }
 }
 
@@ -246,13 +246,11 @@ for index in 0..<players.count {
  * Print team players
  */
 
-print("==================== TEAMS ====================")
+print("\n===================== TEAMS =====================\n")
 
 print(team: teamSharks, name: SHARKS_TEAM_NAME)
 print(team: teamDragons, name: DRAGONS_TEAM_NAME)
 print(team: teamRaptors, name: RAPTORS_TEAM_NAME)
-
-print("==================== TEAMS ====================")
 
 /*
  * Generate letters to the guardians
@@ -266,9 +264,7 @@ generate(letters: &letters, forTeam: teamRaptors)
  * Print letters to the guardians
  */
 
-print("==================== LETTERS ====================")
+print("\n==================== LETTERS ====================\n")
 
 print(letters: letters)
-
-print("==================== LETTERS ====================")
 
